@@ -5,10 +5,8 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: transparent; display: flex; justify-content: center; align-items: flex-start; padding-top: 1rem; font-family: sans-serif; }
-.kw { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-.klbl { font-size: 11px; color: #888; letter-spacing: .08em; text-transform: uppercase; }
-.kouter { position: relative; width: 100px; height: 170px; border: 2px solid #999; border-radius: 5px 5px 3px 3px; overflow: hidden; background: #f0f0f0; margin-top: 14px; }
-.khandle { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); width: 32px; height: 14px; border: 2px solid #999; border-bottom: none; border-radius: 3px 3px 0 0; background: #f0f0f0; }
+.kouter { position: relative; width: 100px; height: 170px; border: 2px solid #999; border-radius: 5px 5px 3px 3px; overflow: hidden; background: #f0f0f0; }
+.khandle { position: absolute; top: -2px; left: 50%; transform: translateX(-50%); width: 32px; height: 12px; border: 2px solid #999; border-bottom: 2px solid #f0f0f0; border-radius: 3px 3px 0 0; background: #f0f0f0; z-index: 2; }
 .kfill { position: absolute; bottom: 0; left: 0; width: 100%; transition: height .6s ease; }
 .kfill::after { content: ''; position: absolute; top: 0; left: -50%; width: 200%; height: 5px; background: rgba(255,255,255,.3); border-radius: 50%; animation: kwave 2.5s ease-in-out infinite; }
 @keyframes kwave { 0%,100% { transform: translateX(0); } 50% { transform: translateX(15px); } }
@@ -16,13 +14,11 @@ body { background: transparent; display: flex; justify-content: center; align-it
 .kmark { width: 6px; height: 1px; background: #ccc; margin-left: auto; }
 .knum { font-size: 28px; font-weight: 600; line-height: 1; color: #222; }
 .kunit { font-size: 14px; color: #888; }
-.kbadge { font-size: 12px; padding: 3px 10px; border-radius: 4px; font-weight: 500; }
 </style>
 </head>
 <body>
-<div class="kw">
-  <div class="klbl">Chlor</div>
-  <div style="position:relative">
+<div style="display:flex;flex-direction:column;align-items:center;gap:1rem;">
+  <div style="position:relative;margin-top:10px;">
     <div class="khandle"></div>
     <div class="kouter">
       <div class="kfill" id="fill"></div>
@@ -32,7 +28,6 @@ body { background: transparent; display: flex; justify-content: center; align-it
   <div style="display:flex;align-items:baseline;gap:3px">
     <span class="knum" id="num">--</span><span class="kunit">%</span>
   </div>
-  <div class="kbadge" id="badge"></div>
 </div>
 <script>
   var v = parseInt(new URLSearchParams(window.location.search).get('level')) || 0;
@@ -40,10 +35,9 @@ body { background: transparent; display: flex; justify-content: center; align-it
   document.getElementById('fill').style.height = v + '%';
   document.getElementById('num').textContent = v;
   var f = document.getElementById('fill');
-  var b = document.getElementById('badge');
-  if (v > 50) { f.style.background='#378ADD'; b.style.background='#E6F1FB'; b.style.color='#185FA5'; b.textContent='Gut befüllt'; }
-  else if (v > 20) { f.style.background='#EF9F27'; b.style.background='#FAEEDA'; b.style.color='#854F0B'; b.textContent='Nachfüllen empfohlen'; }
-  else { f.style.background='#E24B4A'; b.style.background='#FCEBEB'; b.style.color='#A32D2D'; b.textContent = v===0 ? 'Leer — sofort nachfüllen!' : 'Kritisch niedrig!'; }
+  if (v > 50) { f.style.background='#378ADD'; }
+  else if (v > 20) { f.style.background='#EF9F27'; }
+  else { f.style.background='#E24B4A'; }
 </script>
 </body>
 </html>
