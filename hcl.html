@@ -45,14 +45,23 @@ function setLevel(v) {
   else { f.style.background = '#E24B4A'; }
 }
 
-var query = '{device(id:"' + DEVICE_ID + '"){field(fieldName:"' + FIELD + '"){lastValue}}}';
+var query = 'query { device(deviceId:"' + DEVICE_ID + '") { currentMeasurements(allActiveFields: true) { value field { fieldName } } } }';
 fetch('https://api.datacake.co/graphql/', {
   method: 'POST',
   headers: { 'Authorization': 'Token ' + API_TOKEN, 'Content-Type': 'application/json' },
   body: JSON.stringify({ query: query })
 })
 .then(function(r){ return r.json(); })
-.then(function(d){ setLevel(parseFloat(d.data.device.field.lastValue)); })
+.then(function(d){
+  var measurements = d.data.device.currentMeasurements;
+  for (var i = 0; i < measurements.length; i++) {
+    if (measurements[i].field.fieldName === FIELD) {
+      setLevel(parseFloat(measurements[i].value));
+      return;
+    }
+  }
+  document.getElementById('num').textContent = '?';
+})
 .catch(function(){ document.getElementById('num').textContent = '?'; });
 </script>
 </body>
