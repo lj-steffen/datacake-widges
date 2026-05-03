@@ -35,8 +35,6 @@ body { background: transparent; display: flex; justify-content: center; align-it
   </div>
 </div>
 <script>
-var API_TOKEN = 'a34244519f5e5c9fbcf213c7639219807ac5ae4a';
-var DEVICE_ID = '7c087f2f-577e-47b1-b38f-d728deeb6860';
 var FIELD = 'FILL_LEVEL_FLOCK';
 var COLOR_HIGH = '#7B5C3E';
 var COLOR_MID = '#5C4229';
@@ -52,24 +50,10 @@ function setLevel(v) {
   else { f.style.background = COLOR_LOW; }
 }
 
-var query = 'query { device(deviceId:"' + DEVICE_ID + '") { currentMeasurements(allActiveFields: true) { value field { fieldName } } } }';
-fetch('https://api.datacake.co/graphql/', {
-  method: 'POST',
-  headers: { 'Authorization': 'Token ' + API_TOKEN, 'Content-Type': 'application/json' },
-  body: JSON.stringify({ query: query })
-})
-.then(function(r){ return r.json(); })
-.then(function(d){
-  var measurements = d.data.device.currentMeasurements;
-  for (var i = 0; i < measurements.length; i++) {
-    if (measurements[i].field.fieldName === FIELD) {
-      setLevel(parseFloat(measurements[i].value));
-      return;
-    }
-  }
-  document.getElementById('num').textContent = '?';
-})
-.catch(function(){ document.getElementById('num').textContent = '?'; });
+fetch('/.netlify/functions/datacake?field=' + FIELD)
+  .then(function(r){ return r.json(); })
+  .then(function(d){ setLevel(parseFloat(d.value)); })
+  .catch(function(){ document.getElementById('num').textContent = '?'; });
 </script>
 </body>
 </html>
